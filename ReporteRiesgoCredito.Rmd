@@ -1,0 +1,176 @@
+---
+title: "Credit Risk Report"
+author: "Risk Management"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    includes:
+      in_header: header.tex
+    keep_tex: yes
+  html_document: default
+fontsize: 8pt
+documentclass: article
+---
+<!-- date: "`r format(Sys.time(), '%d %B, %Y')`" -->
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.path='Figs/', tidy = TRUE, fig.pos = 'H')
+options(knitr.table.format = "latex")
+```
+\section{Relevant Portfolio Changes and Information}
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(purrr)
+library(broom)
+library(stringr)
+library(knitr)
+library(kableExtra)
+library(cowplot)
+library(formattable)
+library(gridExtra)
+```
+```{r, echo = FALSE, message = FALSE}
+# recrear datos y funciones de reporte_riesgo_credito.R
+source(file = "reporte_riesgo_credito_simple.R")
+```
+```{r section1, comment='' ,  echo=FALSE, size = 'normalsize'}
+section_sep <- unique(text_df$section)[1]
+```
+\subsubsection{`r section_sep`}
+```{r parrafo_1, comment='' ,  echo=FALSE, size = 'normalsize', fig.pos="h"}
+kable(text_df %>% 
+        dplyr::filter(section == section_sep) %>% 
+        dplyr::select(-c(line, section)),
+      "latex", booktabs = T) %>% 
+  kable_styling(latex_options = c("striped", "HOLD_position", "condensed"), position = "center", full_width = F, font_size = 8) %>% 
+  column_spec(1, bold = T, border_right = T) %>%
+  column_spec(2, width = "45em") %>% 
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+```{r section2, comment='' ,  echo=FALSE, size = 'normalsize'}
+section_sep <- unique(text_df$section)[2]
+```
+\subsubsection{`r section_sep`}
+```{r parrafo_2, comment='' ,  echo=FALSE, size = 'normalsize', fig.pos="h"}
+kable(text_df %>% 
+        dplyr::filter(section == section_sep) %>% 
+        dplyr::select(-c(line, section)),
+      "latex", booktabs = T) %>% 
+  kable_styling(latex_options = c("striped", "HOLD_position"), position = "center",full_width = F, font_size = 8) %>% 
+  column_spec(1, bold = T, border_right = T) %>%
+  column_spec(2, width = "45em") %>% 
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+```{r section3, comment='' ,  echo=FALSE, size = 'normalsize'}
+section_sep <- unique(text_df$section)[3]
+```
+\subsubsection{`r section_sep`}
+```{r parrafo_3, comment='' ,  echo=FALSE, size = 'normalsize', fig.pos="h"}
+kable(text_df %>% 
+        dplyr::filter(section == section_sep) %>% 
+        dplyr::select(-c(line, section)),
+      "latex", booktabs = T) %>% 
+  kable_styling(latex_options = c("striped", "HOLD_position"), position = "center", full_width = F, font_size = 8) %>% 
+  column_spec(1, bold = T, border_right = T) %>%
+  column_spec(2, width = "45em") %>% 
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+\subsection{News}
+```{r summary_news, comment='' ,  echo=FALSE, size = 'normalsize', fig.pos="h"}
+kable(Rnews, "latex", booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position"), position = "center", full_width = F, font_size = 8)  %>%
+  column_spec(1, border_right =F,  width = "3em") %>% 
+  column_spec(2, border_right =F,  width = "48em")%>% 
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+<!-- \pagebreak -->
+
+\section{Portfolio EDA}
+\subsection{Default Probabilities}
+\subsubsection{Moody's top 25 EDFs}
+```{r EDF_PDet_head, comment='' ,  echo=FALSE, size = "normalsize", fig.pos="h"}
+kable(cbind(EDF_head, PDet_head),"latex", booktabs = T, digits = 2, longtable = T) %>%
+  add_header_above(c("","Default" = 4,"", "Deterioration" = 2)) %>%  
+  kable_styling(latex_options=c("striped","HOLD_position","condensed", "repeat_header"), position="center", full_width=F, font_size=7) %>%
+  column_spec(1, bold = T, border_right = T, width = "15em") %>%
+  column_spec(2, width = "3.5em") %>%
+  column_spec(3, width = "3.5em") %>%
+  column_spec(4, width = "3.5em") %>%
+  column_spec(5, width = "3.5em") %>%
+  column_spec(6, bold = T, border_left = T, border_right = T, width = "15em") %>%
+  column_spec(7, width = "3.5em") %>%
+  column_spec(8, width = "3.5em") %>% 
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+```{r EDF_gg, echo=TRUE, fig.width=12, fig.height=4, fig.align="center", fig.pos="h"}
+# plot_grid(gg_EDF_PDet ,gg_EDF_EDFLY, gg_PDet_PDetLY, align = "hv", rel_widths = c(1,1,1), scale = c(1.95,1.95,1.95), nrow = 1, axis = c("l","c","r"))
+grid.arrange(gg_EDF_PDet ,gg_EDF_EDFLY, gg_PDet_PDetLY, nrow = 1)
+```
+\subsubsection{Price-Implicit Default Probabilities top 25}
+```{r prtB_head, comment='' ,  echo=FALSE, size = "normalsize", fig.pos="h"}
+kable(prtB_head,"latex", booktabs = T, digits = 4, longtable = T) %>%
+  kable_styling(latex_options=c("striped","HOLD_position","condensed", "repeat_header"), position="center", full_width=F, font_size=8) %>%
+  column_spec(1, bold = T, border_right = T, width = "15em") %>%
+  column_spec(2, width = "7.5em") %>%
+  column_spec(3, width = "7.5em") %>%
+  column_spec(4, width = "5em") %>%
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+```{r heaven_and_hell, echo=TRUE, fig.width=8,fig.height=8, fig.align="center", fig.pos="h"}
+gg_EDF_PD_p
+```
+\subsection{Risk Filter and Review Status}
+```{r filter_head, comment='' ,  echo=FALSE, size = "normalsize", fig.pos="h"}
+options(knitr.table.format = "latex")
+names(tabla_filtro) <- names(tabla_filtro) %>% gsub(pattern="_", replacement = "")
+tabla_filtro %>%
+  dplyr::mutate(EBITNetDebt = EBITNetDebt %>% round(digits = 3),
+                EBITprox12m = EBITprox12m %>% round(digits = 0),
+                EBITultTrim = EBITultTrim %>% round(digits = 0)) %>% 
+  dplyr::mutate(
+    Commentary = ifelse(is.na(Commentary), "--", Commentary)
+  ) %>% 
+  dplyr::mutate(
+    Issuer = cell_spec(Issuer,format =  "latex"),
+    EBITNetDebt = cell_spec(EBITNetDebt,format =  "latex"),
+    EBITprox12m = cell_spec(EBITprox12m,format =  "latex"),
+    EBITultTrim = cell_spec(EBITultTrim,format =  "latex"),
+    ReviewDate = cell_spec(ReviewDate,format =  "latex", 
+                            color = ifelse(is.na(ReviewDate), myColourT2, myColourT1),
+                            background = factor(is.na(ReviewDate), c(TRUE,FALSE), c(myColourT4, myColourT2))),
+    Commentary = cell_spec(Commentary,format =  "latex",
+                           color = ifelse(Commentary == "+", myColour3, myColourT1),
+                           background = ifelse(Commentary == "x", myColour6, myColourT2))
+    ) %>%
+  dplyr::select(Issuer, EBITNetDebt, EBITprox12m, EBITultTrim, ReviewDate, Commentary) %>% 
+  kable(format = "latex", booktabs = T,  longtable = T, escape = F, digits = 3) %>%
+  kable_styling(latex_options=c("striped","HOLD_position","condensed", "repeat_header"), position="center", full_width=F, font_size=8) %>%
+  column_spec(1, bold = T, border_right = T, width = "15em") %>%
+  column_spec(2, width = "6em") %>%
+  column_spec(3, width = "6em") %>%
+  column_spec(4, width = "6em") %>%
+  column_spec(5, width = "6em") %>%
+  column_spec(6, width = "6em") %>%  
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+\subsection{Market Value}
+```{r sector_gg, echo=TRUE, fig.width=10, fig.height=10, fig.align="center", fig.pos="h"}
+plot_grid(gg_Mkt_Country,gg_Mkt_Sector, gg_Mkt_Mat, align = "h", rel_widths = c(1,1,1), scale = c(1,1,1))
+```
+\subsubsection{Expected Loss}
+```{r ExpLoss, comment='' ,  echo=FALSE, size = 'normalsize', fig.pos="h"}
+kable(prt_EL %>% 
+        dplyr::mutate(Market_Value = formattable::currency(MktValue, digits = 2),
+                      Expected_Loss = formattable::currency(ExpectedLoss_MktV, digits = 2),
+                      Percent_EL = formattable::percent(PercExpectedLoss, digits = 4)) %>% 
+        dplyr::select(ReportingAccountName, Market_Value, Expected_Loss, Percent_EL), "latex", booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position"), position = "center", full_width = F, font_size = 8)  %>%
+  column_spec(1, border_right =T,  width = "15em", bold = T) %>% 
+  column_spec(2, border_right =F,  width = "10em")%>%
+  column_spec(3, border_right =F,  width = "10em")%>%
+  column_spec(4, border_right =F,  width = "10em")%>%
+  row_spec(0, background = myColourT4, color = myColourT2, bold = T)
+```
+
+
