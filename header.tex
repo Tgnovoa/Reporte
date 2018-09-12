@@ -1,0 +1,36 @@
+%\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\usepackage[small,compact]{titlesec}  %alternative for space-saving in format
+\setlength\headheight{20pt}  %(vertical) height associated with the header of the page (24pt std)
+\addtolength{\topskip}{-1mm}  %change length between header and text
+\addtolength{\parskip}{-1mm}  %change length for gap between paragraphs
+\addtolength{\topsep}{-1mm}  %change space between first item and preceding paragraph
+%\addtolength{\partopsep}{-1mm}  %change space added to \topsep when environment starts a new paragraph
+\addtolength{\itemsep}{-1mm}  %change space between successive items
+\addtolength{\floatsep}{-2mm}  %change space between last float or first bottom float and a float
+\addtolength{\dblfloatsep}{-2mm}  %change space between last float or first bottom float and a float of double column
+\addtolength{\textfloatsep}{-2mm}  %change space between last float or first bottom float and the text
+\addtolength{\dbltextfloatsep}{-2mm}  %change space between last float or first bottom float and the text for double columns
+\fancyhead[L]{\includegraphics[width=1.6cm]{Logo_Tresalia_without_Bkgd.png}}
+\fancyfoot[LE,RO]{Credit Risk Report}
+\usepackage{sectsty}
+\definecolor{titulo}{RGB}{34,34,34}
+\definecolor{subtitulo}{RGB}{74,102,112}  
+\definecolor{subsubtitulo}{RGB}{137,159,153}
+\sectionfont{\color{titulo}}
+\subsectionfont{\color{subtitulo}}
+\subsubsectionfont{\color{subsubtitulo}}
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault} 
+\usepackage[T1]{fontenc}
+\usepackage{color}
+
+\pretitle{%
+  \begin{center}
+  \LARGE
+  \includegraphics[width=4cm,height=6cm]{Logo_Tresalia_without_Bkgd.png}\\[\bigskipamount]
+}
+\posttitle{\end{center}}
